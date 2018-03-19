@@ -425,6 +425,26 @@ paths:
           description: "Invalid credentials"
         404:
           description: "Not found"
+  /rankings/teams:
+    get:
+      tags:
+      - "rankings"
+      summary: "Get team rankings"
+      operationId: "getTeamRanking"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+          type: "array"
+            $ref: "#/definitions/TeamRanking"
+        400:
+          description: "Invalid tip"
+        401:
+          description: "Invalid credentials"
+        404:
+          description: "Not found"
 definitions:
   User:
     type: "object"
