@@ -14,6 +14,8 @@ tags:
   description: "Operations about team"
 - name: "games"
   description: "Operations about games"
+- name: "ranking"
+  description: "Operations about rankings"
 schemes:
 - "http"
 paths:
@@ -97,6 +99,8 @@ paths:
       responses:
         200:
           description: "Successful operation"
+        400:
+          description: "Invalid password credentials"
   /users/me:
     get:
       tags:
@@ -185,6 +189,8 @@ paths:
           description: "User not found"
         401:
           description: "Invalid credentials"
+        403:
+          description: "Only the logged in user can modify himself"
   /teams:
     post:
       tags:
@@ -264,7 +270,7 @@ paths:
       tags:
       - "teams"
       summary: "Remove user from team"
-      description: "Only the team owner has the permission to do that"
+      description: "Only the team owner has the permission to do that and the user who wants to remove himself. Moreover if there are not users left in a team then we have to drop it."
       operationId: "removeUserFromTeam"
       produces:
       - "application/json"
@@ -354,6 +360,31 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
+  /teams/{teamId}/ranking:
+    get:
+      tags:
+      - "teams"
+      summary: "Returns a list of users with their rank and points"
+      description: ""
+      operationId: "getTeamRanking"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UserRanking"
+        401:
+          description: "Invalid credentials"
+        404:
+          description: "Not found"
   /game-phases:
     get:
       tags:
@@ -409,6 +440,10 @@ paths:
         in: "path"
         required: true
         type: "string"
+      - name: "userId"
+        in: "query"
+        required: false
+        type: "string"
       - in: "body"
         name: "body"
         required: true
@@ -425,26 +460,42 @@ paths:
           description: "Invalid credentials"
         404:
           description: "Not found"
-  /rankings/teams:
+  /ranking/users:
     get:
       tags:
-      - "rankings"
-      summary: "Get team rankings"
-      operationId: "getTeamRanking"
+      - "ranking"
+      summary: "Returns a list of users with their points"
+      description: ""
+      operationId: "getUsersRanking"
       produces:
       - "application/json"
       responses:
         200:
           description: "Successful operation"
           schema:
-          type: "array"
-            $ref: "#/definitions/TeamRanking"
-        400:
-          description: "Invalid tip"
+            type: "array"
+            items:
+              $ref: "#/definitions/UserRanking"
         401:
           description: "Invalid credentials"
-        404:
-          description: "Not found"
+  /ranking/teams:
+    get:
+      tags:
+      - "ranking"
+      summary: "Returns a list of teams with their points"
+      description: ""
+      operationId: "getTeamsRanking"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TeamRanking"
+        401:
+          description: "Invalid credentials"
 definitions:
   User:
     type: "object"
@@ -480,6 +531,28 @@ definitions:
     properties:
       name:
         type: "string"
+  UserRanking:
+    type: "object"
+    properties:
+      rank:
+        type: "integer"
+        format: "int64"
+      user:
+        $ref: "#/definitions/User"
+      points:
+        type: "integer"
+        format: "int64"
+  TeamRanking:
+    type: "object"
+    properties:
+      rank:
+        type: "integer"
+        format: "int64"
+      team:
+        $ref: "#/definitions/Team"
+      points:
+        type: "integer"
+        format: "int64"
   GameNation:
     type: "object"
     properties:
