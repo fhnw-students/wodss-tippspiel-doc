@@ -17,7 +17,10 @@ tags:
 - name: "ranking"
   description: "Operations about rankings"
 schemes:
-- "http"
+- "https"
+securityDefinitions:
+  basicAuth:
+    type: basic
 paths:
   /auth/register:
     post:
@@ -103,6 +106,8 @@ paths:
           description: "Invalid password credentials"
   /users/me:
     get:
+      security:
+        - basicAuth: []
       tags:
       - "users"
       summary: "Retunrs the currently logged in user"
@@ -119,6 +124,8 @@ paths:
           description: "Invalid credentials"
   /users:
     get:
+      security:
+        - basicAuth: []
       tags:
       - "users"
       summary: "Retunrs a list of users"
@@ -142,6 +149,8 @@ paths:
           description: "Invalid credentials"
   /users/{userId}:
     get:
+      security:
+        - basicAuth: []
       tags:
       - "users"
       summary: "Returns the user with the given id"
@@ -164,6 +173,8 @@ paths:
         404:
           description: "Not found"
     put:
+      security:
+        - basicAuth: []
       tags:
       - "users"
       summary: "Update user"
@@ -193,6 +204,8 @@ paths:
           description: "Only the logged in user can modify himself"
   /teams:
     post:
+      security:
+        - basicAuth: []
       tags:
       - "teams"
       summary: "Create team"
@@ -215,6 +228,8 @@ paths:
           description: "Invalid credentials"
   /teams/{teamId}/uploadAvatar:
     post:
+      security:
+        - basicAuth: []
       tags:
       - "teams"
       summary: "Upload team avatar"
@@ -242,6 +257,8 @@ paths:
           description: "Invalid credentials"
   /teams/{teamId}/inviteUser/{userId}:
     post:
+      security:
+        - basicAuth: []
       tags:
       - "teams"
       summary: "Invite user to team"
@@ -267,6 +284,8 @@ paths:
           description: "Invalid credentials"
   /teams/{teamId}/removeUser/{userId}:
     post:
+      security:
+        - basicAuth: []
       tags:
       - "teams"
       summary: "Remove user from team"
@@ -292,6 +311,8 @@ paths:
           description: "Invalid credentials"
   /teams/{teamId}/accept:
     post:
+      security:
+        - basicAuth: []
       tags:
       - "teams"
       summary: "Accept invation to a team"
@@ -313,6 +334,8 @@ paths:
           description: "Invalid credentials"
   /teams/{teamId}:
     get:
+      security:
+        - basicAuth: []
       tags:
       - "teams"
       summary: "Returns the team with the given id"
@@ -335,6 +358,8 @@ paths:
         404:
           description: "Not found"
     put:
+      security:
+        - basicAuth: []
       tags:
       - "teams"
       summary: "Update team"
@@ -362,6 +387,8 @@ paths:
           description: "Invalid credentials"
   /teams/{teamId}/ranking:
     get:
+      security:
+        - basicAuth: []
       tags:
       - "teams"
       summary: "Returns a list of users with their rank and points"
@@ -387,6 +414,8 @@ paths:
           description: "Not found"
   /game-phases:
     get:
+      security:
+        - basicAuth: []
       tags:
       - "games"
       summary: "Returns a list of phases"
@@ -405,6 +434,8 @@ paths:
           description: "Invalid credentials"
   /games:
     get:
+      security:
+        - basicAuth: []
       tags:
       - "games"
       summary: "Returns a list of games"
@@ -428,6 +459,8 @@ paths:
           description: "Invalid credentials"
   /games/{gameId}/tip:
     post:
+      security:
+        - basicAuth: []
       tags:
       - "games"
       summary: "Enter tip of game"
@@ -462,6 +495,8 @@ paths:
           description: "Not found"
   /ranking/users:
     get:
+      security:
+        - basicAuth: []
       tags:
       - "ranking"
       summary: "Returns a list of users with their points"
@@ -480,6 +515,8 @@ paths:
           description: "Invalid credentials"
   /ranking/teams:
     get:
+      security:
+        - basicAuth: []
       tags:
       - "ranking"
       summary: "Returns a list of teams with their points"
@@ -564,7 +601,7 @@ definitions:
   Tip:
     type: "object"
     properties:
-      homeScore:
+      hostScore:
         type: "integer"
         format: "int64"
       guestScore:
@@ -577,7 +614,7 @@ definitions:
   NewTip:
     type: "object"
     properties:
-      homeScore:
+      hostScore:
         type: "integer"
         format: "int64"
       guestScore:
@@ -631,7 +668,7 @@ definitions:
         format: "int64"
       stadium:
         $ref: "#/definitions/Stadium"
-      home:
+      host:
         $ref: "#/definitions/GameNation"
       guest:
         $ref: "#/definitions/GameNation"
