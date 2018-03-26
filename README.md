@@ -27,12 +27,24 @@ To create the API documentation we used swagger.
 
 ### User Login
 
-![title](./images/**.png)
+![login](./images/login.png)
 
 ### Forgot Password
 
-![title](./images/**.png)
+![reset_password](./images/reset_password.png)
 
 ### Profile
 
-![title](./images/**.png)
+![profile](./images/profile.png)
+
+### Games
+
+![games](./images/games.png)
+
+### Teams
+
+![teams](./images/team_overview.png)
+
+### Ranking
+
+![ranking](./images/ranking.png)
