@@ -21,4 +21,18 @@ To create the API documentation we used swagger.
 
 ## UI Wireframes
 
-**TODO**
+### User Registration
+
+![registration](./images/registration.png)
+
+### User Login
+
+![title](./images/**.png)
+
+### Forgot Password
+
+![title](./images/**.png)
+
+### Profile
+
+![title](./images/**.png)
