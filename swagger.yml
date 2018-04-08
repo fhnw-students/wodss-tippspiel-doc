@@ -45,6 +45,29 @@ paths:
             $ref: "#/definitions/User"
         401:
           description: "Invalid credentials"
+  /auth/login:
+    post:
+      tags:
+      - "auth"
+      summary: "Login a user"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Login response object"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginResponse"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        401:
+          description: "Invalid credentials"
   /auth/reset:
     post:
       tags:
@@ -534,6 +557,11 @@ paths:
         401:
           description: "Invalid credentials"
 definitions:
+  LoginResponse:
+    type: "object"
+    properties:
+      accessToken:
+        type: "string"
   User:
     type: "object"
     properties:
