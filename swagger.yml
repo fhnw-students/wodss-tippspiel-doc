@@ -6,6 +6,8 @@ info:
 host: "localhost:3000"
 basePath: "/api"
 tags:
+- name: "meta"
+  description: "Operations about auth"
 - name: "auth"
   description: "Operations about auth"
 - name: "users"
@@ -21,7 +23,25 @@ schemes:
 securityDefinitions:
   basicAuth:
     type: basic
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
 paths:
+  /:
+    get:
+      tags:
+      - "meta"
+      summary: "Returns information of the api"
+      description: ""
+      operationId: "apiInfo"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/ApiInfo"
   /auth/register:
     post:
       tags:
@@ -47,6 +67,8 @@ paths:
           description: "Invalid credentials"
   /auth/login:
     post:
+      security:
+        - basicAuth: []
       tags:
       - "auth"
       summary: "Login a user"
@@ -127,15 +149,35 @@ paths:
           description: "Successful operation"
         400:
           description: "Invalid password credentials"
+  /auth/verify/{verifyToken}:
+    put:
+      tags:
+      - "auth"
+      summary: "Verifies the user using the email address"
+      description: ""
+      operationId: "verifyEmail"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "verifyToken"
+        in: "path"
+        description: "Token to verify the email and the user"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+        400:
+          description: "Invalid verify token"
   /users/me:
     get:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "users"
-      summary: "Retunrs the currently logged in user"
+      summary: "Returns the currently logged in user"
       description: ""
-      operationId: "loginUser"
+      operationId: "getMe"
       produces:
       - "application/json"
       responses:
@@ -148,7 +190,7 @@ paths:
   /users:
     get:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "users"
       summary: "Retunrs a list of users"
@@ -173,7 +215,7 @@ paths:
   /users/{userId}:
     get:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "users"
       summary: "Returns the user with the given id"
@@ -197,7 +239,7 @@ paths:
           description: "Not found"
     put:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "users"
       summary: "Update user"
@@ -228,7 +270,7 @@ paths:
   /teams:
     post:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "teams"
       summary: "Create team"
@@ -250,9 +292,9 @@ paths:
         401:
           description: "Invalid credentials"
   /teams/{teamId}/uploadAvatar:
-    post:
+    put:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "teams"
       summary: "Upload team avatar"
@@ -278,10 +320,10 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/inviteUser/{userId}:
-    post:
+  /teams/{teamId}/user/{userId}:
+    put:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "teams"
       summary: "Invite user to team"
@@ -305,10 +347,9 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/removeUser/{userId}:
-    post:
+    delete:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "teams"
       summary: "Remove user from team"
@@ -332,10 +373,10 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/accept:
-    post:
+  /teams/{teamId}/user:
+    put:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "teams"
       summary: "Accept invation to a team"
@@ -358,7 +399,7 @@ paths:
   /teams/{teamId}:
     get:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "teams"
       summary: "Returns the team with the given id"
@@ -382,7 +423,7 @@ paths:
           description: "Not found"
     put:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "teams"
       summary: "Update team"
@@ -411,7 +452,7 @@ paths:
   /teams/{teamId}/ranking:
     get:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "teams"
       summary: "Returns a list of users with their rank and points"
@@ -438,7 +479,7 @@ paths:
   /game-phases:
     get:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "games"
       summary: "Returns a list of phases"
@@ -458,7 +499,7 @@ paths:
   /games:
     get:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "games"
       summary: "Returns a list of games"
@@ -480,10 +521,39 @@ paths:
               $ref: "#/definitions/Game"
         401:
           description: "Invalid credentials"
+  /games/{gameId}:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+      - "games"
+      summary: "Update a game"
+      description: "Only the admins can to that"
+      operationId: "modifyGames"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "gameId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated team object"
+        required: true
+        schema:
+          $ref: "#/definitions/Game"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Game"
+        401:
+          description: "Invalid credentials"
   /games/{gameId}/tip:
     post:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "games"
       summary: "Enter tip of game"
@@ -519,7 +589,7 @@ paths:
   /ranking/users:
     get:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "ranking"
       summary: "Returns a list of users with their points"
@@ -539,7 +609,7 @@ paths:
   /ranking/teams:
     get:
       security:
-        - basicAuth: []
+        - bearerAuth: []
       tags:
       - "ranking"
       summary: "Returns a list of teams with their points"
@@ -557,6 +627,13 @@ paths:
         401:
           description: "Invalid credentials"
 definitions:
+  ApiInfo:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      version:
+        type: "string"
   LoginResponse:
     type: "object"
     properties:
