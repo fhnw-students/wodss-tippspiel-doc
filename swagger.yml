@@ -90,6 +90,20 @@ paths:
             $ref: "#/definitions/LoginResponse"
         401:
           description: "Invalid credentials"
+  /auth/logout:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "auth"
+      summary: "Logout a user"
+      description: ""
+      operationId: "logutUser"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
   /auth/reset:
     post:
       tags:
