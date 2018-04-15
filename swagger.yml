@@ -3,7 +3,7 @@ info:
   description: "WM Tippspiel"
   version: "1.0.0"
   title: "WM Tippspiel"
-host: "localhost:3000"
+host: "wodss-tippspiel-api.herokuapp.com"
 basePath: "/api"
 tags:
 - name: "meta"
