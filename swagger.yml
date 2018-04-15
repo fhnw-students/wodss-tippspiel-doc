@@ -153,7 +153,7 @@ paths:
     put:
       tags:
       - "auth"
-      summary: "Verifys the user throw the email address"
+      summary: "Verifies the user using the email address"
       description: ""
       operationId: "verifyEmail"
       produces:
