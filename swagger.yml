@@ -98,7 +98,7 @@ paths:
       - "auth"
       summary: "Logout a user"
       description: ""
-      operationId: "logutUser"
+      operationId: "logoutUser"
       produces:
       - "application/json"
       responses:
