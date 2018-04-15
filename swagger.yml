@@ -175,7 +175,7 @@ paths:
         - bearerAuth: []
       tags:
       - "users"
-      summary: "Retunrs the currently logged in user"
+      summary: "Returns the currently logged in user"
       description: ""
       operationId: "getMe"
       produces:
