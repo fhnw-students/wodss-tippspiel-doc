@@ -91,7 +91,7 @@ paths:
         401:
           description: "Invalid credentials"
   /auth/reset:
-    post:
+    put:
       tags:
       - "auth"
       summary: "Request to reset password of the given user(email)"
@@ -119,7 +119,7 @@ paths:
         200:
           description: "Successful operation"
   /auth/reset/{resetToken}:
-    post:
+    put:
       tags:
       - "auth"
       summary: "Reset password of the given user"
@@ -187,56 +187,6 @@ paths:
             $ref: "#/definitions/User"
         401:
           description: "Invalid credentials"
-  /users:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-      - "users"
-      summary: "Retunrs a list of users"
-      description: ""
-      operationId: "getUsers"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "filter"
-        in: "query"
-        description: "The user name or email"
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/User"
-        401:
-          description: "Invalid credentials"
-  /users/{userId}:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-      - "users"
-      summary: "Returns the user with the given id"
-      description: ""
-      operationId: "getUserById"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/User"
-        401:
-          description: "Invalid credentials"
-        404:
-          description: "Not found"
     put:
       security:
         - bearerAuth: []
@@ -248,10 +198,6 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "userId"
-        in: "path"
-        required: true
-        type: "string"
       - in: "body"
         name: "body"
         description: "Updated user object"
@@ -267,6 +213,26 @@ paths:
           description: "Invalid credentials"
         403:
           description: "Only the logged in user can modify himself"
+  /users/me/teams:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "users"
+      summary: "Returns the teams of the current user"
+      description: ""
+      operationId: "getTeamsOfMe"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Team"
+        401:
+          description: "Invalid credentials"
   /teams:
     post:
       security:
@@ -291,36 +257,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/uploadAvatar:
-    put:
-      security:
-        - bearerAuth: []
-      tags:
-      - "teams"
-      summary: "Upload team avatar"
-      operationId: "uploadTeamAvatar"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "teamId"
-        in: "path"
-        required: true
-        type: "string"
-      - name: "avatar"
-        in: "formData"
-        description: "avatar to upload"
-        required: true
-        type: "file"
-      responses:
-        400:
-          description: "Invalid team supplied"
-        404:
-          description: "Not found"
-        401:
-          description: "Invalid credentials"
-  /teams/{teamId}/user/{userId}:
+  /teams/{teamId}/user:
     put:
       security:
         - bearerAuth: []
@@ -336,8 +273,8 @@ paths:
         in: "path"
         required: true
         type: "string"
-      - name: "userId"
-        in: "path"
+      - name: "email"
+        in: "query"
         required: true
         type: "string"
       responses:
@@ -347,6 +284,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
+  /teams/{teamId}/user/{userId}:
     delete:
       security:
         - bearerAuth: []
@@ -373,7 +311,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/user:
+  /teams/{teamId}/user/me:
     put:
       security:
         - bearerAuth: []
@@ -390,6 +328,30 @@ paths:
         required: true
         type: "string"
       responses:
+        400:
+          description: "Invalid parameter supplied"
+        404:
+          description: "Not found"
+        401:
+          description: "Invalid credentials"
+  /teams/user/me:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "teams"
+      summary: "Returns the teams of the current user"
+      description: ""
+      operationId: "getMyTeams"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Team"
         400:
           description: "Invalid parameter supplied"
         404:
@@ -551,7 +513,7 @@ paths:
         401:
           description: "Invalid credentials"
   /games/{gameId}/tip:
-    post:
+    put:
       security:
         - bearerAuth: []
       tags:
@@ -637,7 +599,7 @@ definitions:
   LoginResponse:
     type: "object"
     properties:
-      accessToken:
+      token:
         type: "string"
   User:
     type: "object"
@@ -665,8 +627,6 @@ definitions:
         type: "integer"
         format: "int64"
       name:
-        type: "string"
-      avatarUrl:
         type: "string"
   NewTeam:
     type: "object"
