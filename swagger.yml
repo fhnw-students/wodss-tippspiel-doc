@@ -4,7 +4,6 @@ info:
   version: "1.0.0"
   title: "WM Tippspiel"
 host: "wodss-tippspiel-api.herokuapp.com"
-basePath: "/api"
 tags:
 - name: "meta"
   description: "Operations about auth"
@@ -28,7 +27,7 @@ securityDefinitions:
     name: Authorization
     in: header
 paths:
-  /:
+  /api:
     get:
       tags:
       - "meta"
@@ -169,7 +168,7 @@ paths:
           description: "Successful operation"
         400:
           description: "Invalid verify token"
-  /users/me:
+  /api/users/me:
     get:
       security:
         - bearerAuth: []
@@ -213,7 +212,7 @@ paths:
           description: "Invalid credentials"
         403:
           description: "Only the logged in user can modify himself"
-  /users/me/teams:
+  /api/users/me/teams:
     get:
       security:
         - bearerAuth: []
@@ -233,7 +232,7 @@ paths:
               $ref: "#/definitions/Team"
         401:
           description: "Invalid credentials"
-  /teams:
+  /api/teams:
     post:
       security:
         - bearerAuth: []
@@ -257,7 +256,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/user:
+  /api/teams/{teamId}/user:
     put:
       security:
         - bearerAuth: []
@@ -284,7 +283,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/user/{userId}:
+  /api/teams/{teamId}/user/{userId}:
     delete:
       security:
         - bearerAuth: []
@@ -311,7 +310,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/user/me:
+  /api/teams/{teamId}/user/me:
     put:
       security:
         - bearerAuth: []
@@ -334,7 +333,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/user/me:
+  /api/teams/user/me:
     get:
       security:
         - bearerAuth: []
@@ -358,7 +357,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}:
+  /api/teams/{teamId}:
     get:
       security:
         - bearerAuth: []
@@ -411,7 +410,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/ranking:
+  /api/teams/{teamId}/ranking:
     get:
       security:
         - bearerAuth: []
@@ -438,7 +437,7 @@ paths:
           description: "Invalid credentials"
         404:
           description: "Not found"
-  /game-phases:
+  /api/game-phases:
     get:
       security:
         - bearerAuth: []
@@ -458,7 +457,7 @@ paths:
               $ref: "#/definitions/GamePhase"
         401:
           description: "Invalid credentials"
-  /games:
+  /api/games:
     get:
       security:
         - bearerAuth: []
@@ -483,7 +482,7 @@ paths:
               $ref: "#/definitions/Game"
         401:
           description: "Invalid credentials"
-  /games/{gameId}:
+  /api/games/{gameId}:
     put:
       security:
         - bearerAuth: []
@@ -512,7 +511,7 @@ paths:
             $ref: "#/definitions/Game"
         401:
           description: "Invalid credentials"
-  /games/{gameId}/tip:
+  /api/games/{gameId}/tip:
     put:
       security:
         - bearerAuth: []
@@ -548,7 +547,7 @@ paths:
           description: "Invalid credentials"
         404:
           description: "Not found"
-  /ranking/users:
+  /api/ranking/users:
     get:
       security:
         - bearerAuth: []
@@ -568,7 +567,7 @@ paths:
               $ref: "#/definitions/UserRanking"
         401:
           description: "Invalid credentials"
-  /ranking/teams:
+  /api/ranking/teams:
     get:
       security:
         - bearerAuth: []
