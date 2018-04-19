@@ -216,8 +216,12 @@ paths:
         description: "Updated user object"
         required: true
         schema:
-          $ref: "#/definitions/User"
+          $ref: "#/definitions/UserChanged"
       responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/User"
         400:
           description: "Invalid user supplied"
         404:
@@ -264,6 +268,10 @@ paths:
         schema:
           $ref: "#/definitions/NewTeam"
       responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Team"
         400:
           description: "Invalid team supplied"
         404:
@@ -291,6 +299,10 @@ paths:
         required: true
         type: "string"
       responses:
+        200:
+          description: "Changed team"
+          schema:
+            $ref: "#/definitions/Team"
         400:
           description: "Invalid parameter supplied"
         404:
@@ -318,6 +330,8 @@ paths:
         required: true
         type: "string"
       responses:
+        204:
+          description: "Successfully removed user from the team"
         400:
           description: "Invalid parameter supplied"
         404:
@@ -341,6 +355,10 @@ paths:
         required: true
         type: "string"
       responses:
+        200:
+          description: "Team"
+          schema:
+            $ref: "#/definitions/Team"
         400:
           description: "Invalid parameter supplied"
         404:
@@ -418,6 +436,10 @@ paths:
         schema:
           $ref: "#/definitions/Team"
       responses:
+        200:
+          description: "Changed team"
+          schema:
+            $ref: "#/definitions/Team"
         400:
           description: "Invalid team supplied"
         404:
@@ -624,6 +646,28 @@ definitions:
         type: "string"
       email:
         type: "string"
+      isAdmin:
+        type: "boolean"
+  UserChanged:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      email:
+        type: "string"
+  TeamUser:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      isOwner:
+        type: "boolean"
   NewUser:
     type: "object"
     properties:
@@ -641,6 +685,10 @@ definitions:
         format: "int64"
       name:
         type: "string"
+      users:
+        type: "array"
+        items:
+          $ref: "#/definitions/TeamUser"
   NewTeam:
     type: "object"
     properties:
@@ -716,7 +764,9 @@ definitions:
         type: "string"
       name:
         type: "string"
-  Stadium:
+      tournamentGroup:
+        type: "string"
+  Location:
     type: "object"
     properties:
       id:
@@ -724,6 +774,9 @@ definitions:
         format: "int64"
       name:
         type: "string"
+      utcDiff:
+        type: "integer"
+        format: "int64"
   GamePhase:
     type: "object"
     properties:
@@ -741,11 +794,10 @@ definitions:
       date:
         type: "string"
         format: "date-time"
-      phaseId:
-        type: "integer"
-        format: "int64"
-      stadium:
-        $ref: "#/definitions/Stadium"
+      phase:
+        $ref: "#/definitions/GamePhase"
+      location:
+        $ref: "#/definitions/Location"
       host:
         $ref: "#/definitions/GameNation"
       guest:
