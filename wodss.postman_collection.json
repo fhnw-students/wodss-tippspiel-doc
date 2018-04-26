@@ -1,0 +1,1019 @@
+{
+	"info": {
+		"_postman_id": "e0811f48-5325-43a3-8a10-fd6750d0a870",
+		"name": "WM Tippspiel",
+		"description": "WM Tippspiel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api",
+			"description": "Folder for api",
+			"item": [
+				{
+					"name": "Returns information of the api",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/api",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"description": "Folder for auth",
+			"item": [
+				{
+					"name": "Registers a new user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "User object"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login a user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9a84bbde-775b-4c83-ba79-f5f6c48d81f0",
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"token\", jsonData.token);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "hirsch",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Login response object"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout a user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/logout",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request to reset password of the given user(email)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Reset body"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/reset",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset password of the given user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Password"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/reset/:resetToken",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"reset",
+								":resetToken"
+							],
+							"variable": [
+								{
+									"key": "resetToken",
+									"value": "{{resetToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verifies the user using the email address",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/verify/:verifyToken",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"verify",
+								":verifyToken"
+							],
+							"variable": [
+								{
+									"key": "verifyToken",
+									"value": "{{verifyToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"description": "Folder for users",
+			"item": [
+				{
+					"name": "Returns the currently logged in user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/users/me",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Updated user object"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/users/me",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the teams of the current user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/users/me/teams",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the games with the tips of the current user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/users/me/games?phaseId={{phaseId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"games"
+							],
+							"query": [
+								{
+									"key": "phaseId",
+									"value": "{{phaseId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the games with the tips of the user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/users/:userId/games?phaseId={{phaseId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"games"
+							],
+							"query": [
+								{
+									"key": "phaseId",
+									"value": "{{phaseId}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "teams",
+			"description": "Folder for teams",
+			"item": [
+				{
+					"name": "Create team",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Created team object"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/teams",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invite user to team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/teams/:teamId/user?email={{email}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"teams",
+								":teamId",
+								"user"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "{{email}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						},
+						"description": "Only the team owner has the permission to do that"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove user from team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/teams/:teamId/user/:userId",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"teams",
+								":teamId",
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						},
+						"description": "Only the team owner has the permission to do that and the user who wants to remove himself. Moreover if there are not users left in a team then we have to drop it."
+					},
+					"response": []
+				},
+				{
+					"name": "Accept invation to a team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/teams/:teamId/user/me",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"teams",
+								":teamId",
+								"user",
+								"me"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						},
+						"description": "Only invited user can perform this"
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the teams of the current user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/teams/user/me",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"teams",
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the team with the given id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/teams/:teamId",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"teams",
+								":teamId"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Updated team object"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/teams/:teamId",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"teams",
+								":teamId"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns a list of users with their rank and points",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/teams/:teamId/ranking",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"teams",
+								":teamId",
+								"ranking"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "game-phases",
+			"description": "Folder for game-phases",
+			"item": [
+				{
+					"name": "Returns a list of phases",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/game-phases",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-phases"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "games",
+			"description": "Folder for games",
+			"item": [
+				{
+					"name": "Returns all games",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/games?phaseId={{phaseId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"games"
+							],
+							"query": [
+								{
+									"key": "phaseId",
+									"value": "{{phaseId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a game",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Updated team object"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/games/:gameId",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"games",
+								":gameId"
+							],
+							"variable": [
+								{
+									"key": "gameId",
+									"value": "{{gameId}}"
+								}
+							]
+						},
+						"description": "Only the admins can to that"
+					},
+					"response": []
+				},
+				{
+					"name": "Enter tip of game",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/games/:gameId/tip?userId={{userId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"games",
+								":gameId",
+								"tip"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "gameId",
+									"value": "{{gameId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ranking",
+			"description": "Folder for ranking",
+			"item": [
+				{
+					"name": "Returns a list of users with their points",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/ranking/users",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"ranking",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns a list of teams with their points",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{BASE_URL}}/ranking/teams",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"ranking",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
