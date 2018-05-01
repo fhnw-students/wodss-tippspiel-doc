@@ -572,6 +572,30 @@ paths:
               $ref: "#/definitions/RawGame"
         401:
           description: "Invalid credentials"
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+      - "games"
+      summary: "Create a new game"
+      description: "Only the admins can to that"
+      operationId: "createGame"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Create a game object"
+        required: true
+        schema:
+          $ref: "#/definitions/GameScore"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Game"
+        401:
+          description: "Invalid credentials"
   /games/{gameId}:
     put:
       security:
@@ -590,10 +614,10 @@ paths:
         type: "string"
       - in: "body"
         name: "body"
-        description: "Updated team object"
+        description: "Updated game object"
         required: true
         schema:
-          $ref: "#/definitions/Game"
+          $ref: "#/definitions/GameScore"
       responses:
         200:
           description: "Successful operation"
@@ -873,3 +897,12 @@ definitions:
         $ref: "#/definitions/GameNation"
       tip:
         $ref: "#/definitions/Tip"
+  GameScore:
+    type: "object"
+    properties:
+      hostScore:
+        type: "integer"
+        format: "int64"
+      guestScore:
+        type: "integer"
+        format: "int64"
