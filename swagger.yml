@@ -787,10 +787,17 @@ definitions:
       guestScore:
         type: "integer"
         format: "int64"
-      rules:
-        type: "array"
-        items:
-          $ref: "#/definitions/Rule"
+      tippedHostScoreCorrectly:
+        type: "boolean"
+      tippedGuestScoreCorrectly:
+        type: "boolean"
+      tippedWinnerCorrectly:
+        type: "boolean"
+      tippedBalanceAndWinnerCorrectly:
+        type: "boolean"
+      points:
+        type: "integer"
+        format: "int64"
   NewTip:
     type: "object"
     properties:
@@ -800,21 +807,12 @@ definitions:
       guestScore:
         type: "integer"
         format: "int64"
-  Rule:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      description:
-        type: "string"
-      points:
-        type: "integer"
-        format: "int64"
   Nation:
     type: "object"
     properties:
       id:
+        type: "string"
+      code:
         type: "string"
       name:
         type: "string"
