@@ -17,6 +17,8 @@ tags:
   description: "Operations about games"
 - name: "ranking"
   description: "Operations about rankings"
+- name: "static"
+  description: "Static data enpoints"
 schemes:
 - "https"
 securityDefinitions:
@@ -216,7 +218,7 @@ paths:
         description: "Updated user object"
         required: true
         schema:
-          $ref: "#/definitions/UserChanged"
+          $ref: "#/definitions/User"
       responses:
         200:
           description: "Successful operation"
@@ -250,32 +252,7 @@ paths:
               $ref: "#/definitions/Team"
         401:
           description: "Invalid credentials"
-  /users/me/games:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-      - "users"
-      summary: "Returns the games with the tips of the current user"
-      description: ""
-      operationId: "getCurrentUsersTips"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "phaseId"
-        in: "query"
-        description: "The phase of the game like final"
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Game"
-        401:
-          description: "Invalid credentials"
-  /users/{userId}/games:
+  /users/{username}/games:
     get:
       security:
         - bearerAuth: []
@@ -283,17 +260,13 @@ paths:
       - "users"
       summary: "Returns the games with the tips of the user"
       description: ""
-      operationId: "getUsersTips"
+      operationId: "getUsersTipsByUsername"
       produces:
       - "application/json"
       parameters:
-      - name: "userId"
+      - name: "username"
         in: "path"
         required: true
-        type: "string"
-      - name: "phaseId"
-        in: "query"
-        description: "The phase of the game like final"
         type: "string"
       responses:
         200:
@@ -301,16 +274,18 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Game"
+              $ref: "#/definitions/TippedGame"
         401:
           description: "Invalid credentials"
+        404:
+          description: "User not found"
   /teams:
     post:
       security:
         - bearerAuth: []
       tags:
       - "teams"
-      summary: "Create team"
+      summary: "Creates a new team and sets the current user as the owner"
       operationId: "createTeam"
       produces:
       - "application/json"
@@ -332,14 +307,124 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/user:
+  /teams/{teamId}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "teams"
+      summary: "Returns the team with the given id"
+      description: ""
+      operationId: "getTeamById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Team"
+        401:
+          description: "Invalid credentials"
+        404:
+          description: "Not found"
     put:
       security:
         - bearerAuth: []
       tags:
       - "teams"
-      summary: "Invite user to team"
-      description: "Only the team owner has the permission to do that"
+      summary: "Update team"
+      description: "Only the owner of the team can change the team"
+      operationId: "updateTeam"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated team object"
+        required: true
+        schema:
+          $ref: "#/definitions/Team"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Team"
+        400:
+          description: "Invalid team supplied"
+        404:
+          description: "Not found"
+        401:
+          description: "Invalid credentials"
+  /teams/{teamId}/ranking:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "teams"
+      summary: "Returns a list of users with their rank and points"
+      description: ""
+      operationId: "getTeamRanking"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UserRanking"
+        401:
+          description: "Invalid credentials"
+        404:
+          description: "Not found"
+  /teams/{teamId}/user:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "teams"
+      summary: "Returns the users of the team"
+      description: ""
+      operationId: "getTeammates"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "email"
+        in: "query"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TeamUser"
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+      - "teams"
+      summary: "Creates a team invitation"
+      description: "Only the owner of the team can invited other users by email"
       operationId: "inviteUserToTeam"
       produces:
       - "application/json"
@@ -354,7 +439,31 @@ paths:
         type: "string"
       responses:
         200:
-          description: "Changed team"
+          description: "Successful operation"
+        400:
+          description: "Invalid parameter supplied"
+        404:
+          description: "Not found"
+        401:
+          description: "Invalid credentials"
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+      - "teams"
+      summary: "Adds a user to team"
+      description: "Only the invited user can accept the invitation"
+      operationId: "addUserToTeam"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
           schema:
             $ref: "#/definitions/Team"
         400:
@@ -392,186 +501,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/user/me:
-    put:
-      security:
-        - bearerAuth: []
-      tags:
-      - "teams"
-      summary: "Accept invation to a team"
-      description: "Only invited user can perform this"
-      operationId: "acceptTeam"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "teamId"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Team"
-          schema:
-            $ref: "#/definitions/Team"
-        400:
-          description: "Invalid parameter supplied"
-        404:
-          description: "Not found"
-        401:
-          description: "Invalid credentials"
-  /teams/user/me:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-      - "teams"
-      summary: "Returns the teams of the current user"
-      description: ""
-      operationId: "getMyTeams"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Team"
-        400:
-          description: "Invalid parameter supplied"
-        404:
-          description: "Not found"
-        401:
-          description: "Invalid credentials"
-  /teams/{teamId}:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-      - "teams"
-      summary: "Returns the team with the given id"
-      description: ""
-      operationId: "getTeamById"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "teamId"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/Team"
-        401:
-          description: "Invalid credentials"
-        404:
-          description: "Not found"
-    put:
-      security:
-        - bearerAuth: []
-      tags:
-      - "teams"
-      summary: "Update team"
-      description: ""
-      operationId: "updateTeam"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "teamId"
-        in: "path"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated team object"
-        required: true
-        schema:
-          $ref: "#/definitions/Team"
-      responses:
-        200:
-          description: "Changed team"
-          schema:
-            $ref: "#/definitions/Team"
-        400:
-          description: "Invalid team supplied"
-        404:
-          description: "Not found"
-        401:
-          description: "Invalid credentials"
-  /teams/{teamId}/ranking:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-      - "teams"
-      summary: "Returns a list of users with their rank and points"
-      description: ""
-      operationId: "getTeamRanking"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "teamId"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/UserRanking"
-        401:
-          description: "Invalid credentials"
-        404:
-          description: "Not found"
-  /game-phases:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-      - "games"
-      summary: "Returns a list of phases"
-      description: ""
-      operationId: "getGamePhases"
-      produces:
-      - "application/json"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/GamePhase"
-        401:
-          description: "Invalid credentials"
   /games:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-      - "games"
-      summary: "Returns all games"
-      description: ""
-      operationId: "getGames"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "phaseId"
-        in: "query"
-        description: "The phase of the game like final"
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/RawGame"
-        401:
-          description: "Invalid credentials"
     post:
       security:
         - bearerAuth: []
@@ -596,6 +526,8 @@ paths:
             $ref: "#/definitions/Game"
         401:
           description: "Invalid credentials"
+        403:
+          description: "Not allowed"
   /games/{gameId}:
     put:
       security:
@@ -625,6 +557,30 @@ paths:
             $ref: "#/definitions/Game"
         401:
           description: "Invalid credentials"
+        403:
+          description: "Not allowed"
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+      - "games"
+      summary: "Delete a game"
+      description: "Only the admins can to that"
+      operationId: "deleteGames"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "gameId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+        401:
+          description: "Invalid credentials"
+        403:
+          description: "Not allowed"
   /games/{gameId}/tip:
     put:
       security:
@@ -632,7 +588,7 @@ paths:
       tags:
       - "games"
       summary: "Enter tip of game"
-      description: ""
+      description: "Only the current user can alter his bets"
       operationId: "tipGame"
       produces:
       - "application/json"
@@ -649,12 +605,12 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/NewTip"
+          $ref: "#/definitions/GameScore"
       responses:
         200:
           description: "Successful operation"
           schema:
-            $ref: "#/definitions/NewTip"
+            $ref: "#/definitions/TippedGame"
         400:
           description: "Invalid tip"
         401:
@@ -701,6 +657,66 @@ paths:
               $ref: "#/definitions/TeamRanking"
         401:
           description: "Invalid credentials"
+  /game-phases:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "static"
+      summary: "Returns a list of phases"
+      description: ""
+      operationId: "getGamePhases"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/GamePhase"
+        401:
+          description: "Invalid credentials"
+  /locations:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "static"
+      summary: "Returns a list of locations"
+      description: ""
+      operationId: "getLocations"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Location"
+        401:
+          description: "Invalid credentials"
+  /nations:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "static"
+      summary: "Returns a list of nations"
+      description: ""
+      operationId: "getNations"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Nation"
+        401:
+          description: "Invalid credentials"
 definitions:
   ApiInfo:
     type: "object"
@@ -714,6 +730,17 @@ definitions:
     properties:
       token:
         type: "string"
+      expiration:
+        type: "string"
+  NewUser:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
   User:
     type: "object"
     properties:
@@ -726,52 +753,6 @@ definitions:
         type: "string"
       isAdmin:
         type: "boolean"
-  UserChanged:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      username:
-        type: "string"
-      email:
-        type: "string"
-  TeamUser:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      username:
-        type: "string"
-      isOwner:
-        type: "boolean"
-  NewUser:
-    type: "object"
-    properties:
-      username:
-        type: "string"
-      email:
-        type: "string"
-      password:
-        type: "string"
-  Team:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-      users:
-        type: "array"
-        items:
-          $ref: "#/definitions/TeamUser"
-  NewTeam:
-    type: "object"
-    properties:
-      name:
-        type: "string"
   UserRanking:
     type: "object"
     properties:
@@ -783,6 +764,29 @@ definitions:
       points:
         type: "integer"
         format: "int64"
+  NewTeam:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+  Team:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+  TeamUser:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      owner:
+        type: "boolean"
   TeamRanking:
     type: "object"
     properties:
@@ -792,43 +796,6 @@ definitions:
       team:
         $ref: "#/definitions/Team"
       points:
-        type: "integer"
-        format: "int64"
-  GameNation:
-    type: "object"
-    properties:
-      nation:
-        $ref: "#/definitions/Nation"
-      score:
-        type: "integer"
-        format: "int64"
-  Tip:
-    type: "object"
-    properties:
-      hostScore:
-        type: "integer"
-        format: "int64"
-      guestScore:
-        type: "integer"
-        format: "int64"
-      tippedHostScoreCorrectly:
-        type: "boolean"
-      tippedGuestScoreCorrectly:
-        type: "boolean"
-      tippedWinnerCorrectly:
-        type: "boolean"
-      tippedBalanceAndWinnerCorrectly:
-        type: "boolean"
-      points:
-        type: "integer"
-        format: "int64"
-  NewTip:
-    type: "object"
-    properties:
-      hostScore:
-        type: "integer"
-        format: "int64"
-      guestScore:
         type: "integer"
         format: "int64"
   Nation:
@@ -861,7 +828,7 @@ definitions:
         format: "int64"
       name:
         type: "string"
-  RawGame:
+  Game:
     type: "object"
     properties:
       id:
@@ -878,7 +845,7 @@ definitions:
         $ref: "#/definitions/GameNation"
       guest:
         $ref: "#/definitions/GameNation"
-  Game:
+  TippedGame:
     type: "object"
     properties:
       id:
@@ -897,6 +864,14 @@ definitions:
         $ref: "#/definitions/GameNation"
       tip:
         $ref: "#/definitions/Tip"
+  GameNation:
+    type: "object"
+    properties:
+      nation:
+        $ref: "#/definitions/Nation"
+      score:
+        type: "integer"
+        format: "int64"
   GameScore:
     type: "object"
     properties:
@@ -904,5 +879,25 @@ definitions:
         type: "integer"
         format: "int64"
       guestScore:
+        type: "integer"
+        format: "int64"
+  Tip:
+    type: "object"
+    properties:
+      hostScore:
+        type: "integer"
+        format: "int64"
+      guestScore:
+        type: "integer"
+        format: "int64"
+      tippedHostScoreCorrectly:
+        type: "boolean"
+      tippedGuestScoreCorrectly:
+        type: "boolean"
+      tippedWinnerCorrectly:
+        type: "boolean"
+      tippedBalanceAndWinnerCorrectly:
+        type: "boolean"
+      points:
         type: "integer"
         format: "int64"
