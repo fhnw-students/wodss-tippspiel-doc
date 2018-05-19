@@ -91,4 +91,64 @@ We put the wireframes into a separate document.
 
 [Go to the UI Wireframs](./UI_WIREFRAMES.md).
 
+## Frontend
 
+### Application Structure
+
+The chosen JS-framework Vue.js does not force a specific structure. However, the ecosystem provides some useful tools and libraries to build large scale application.
+
+```
+├── public									# static files like index.html & favicon
+├── src
+│   ├── assets							# Fonts and images
+│   ├── components
+│		│   ├── Hello.vue				# Vue.JS components
+│		│   └── ...
+│   ├── config
+│		│   └── app.config.ts		# configuration from the .env* files
+│   ├── locals
+│		│   ├── de.ts						# Translation files
+│		│   └── ...
+│   ├── models
+│   ├── pages								# Page components
+│   ├── plugins
+│		│   └── **/*.plugin.ts	# Vue.JS plugins
+│   ├── routes							# All defined application routes are here
+│   ├── services
+│		│   ├── api							# All service for making api requests
+│		│   └── **/*.service.ts
+│   ├── store								# Vuex store
+│		│   ├── modules
+│		│   └── index.ts
+│   ├── styles							# Global styles written in SASS
+│   ├── types								# Custom type definitions
+│   ├── App.vue							# Main component
+│   └── main.ts							# Bootstraps the app
+├── .env.development				# App configuration for the development environment
+├── .env.production
+├── .travis.yml							# CI configuration
+├── package.json
+├── Procfile								# Defines the run command for heroku
+├── README.md								# Documentation
+├── server.js								# Small web-server for deploying on heroku
+├── static.json							# Defines the root path for heroku
+├── tsconfig.json						# TypeScript configuration
+├── tslint.json							# TypeScript lint configuration
+└── vue.config.js						# Extends the webpack config
+```
+
+### Libraries
+
+TODO
+
+### Routing
+
+TODO
+
+### Store Management
+
+TODO
+
+## Backend
+
+TOOD
