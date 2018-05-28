@@ -82,7 +82,7 @@ A user can bet a game and this will be stored in the `tip` table. However, he ca
 There are two types of rankings: user ranking and team ranking. The user ranking consists all users of the application. The team ranking filters the users that are member of the corresponding team. They are sorted according to the following criteria:
 
 1. Number of points
-2. Number of bets Submitted (less bets are higher calculated) 
+2. Number of bets Submitted (less bets are higher valued) 
 3. Alphabetical order
 
 As additional feature pagination is implemented with the rankings.  
