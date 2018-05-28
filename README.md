@@ -309,6 +309,7 @@ After the states are mutated, the components receive the new data and re-render 
 #### Authentication
 In order to be compliant with state of the art security concepts and not to hold plain text credentials on the client side we decided to use JWT for user authentication. This mechanism enables us to maintain a signed token that expires (in our case) in one hour. This way we do not have to store critical data on the client where it could be accessed by mailcious parties.
 However, there are some exceptions where we grant access with other authentication methods. The following table describes the access level for the specific routes (as one as well can see in the swagger doucmentation):
+
 | Route | Authentication | Reason |
 | ----- | -------------- | ------ |
 | /api  | public        | This is an information that we display on every page in the footer (also on the login or registration pages) |
