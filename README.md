@@ -6,11 +6,11 @@
 
 ## Table of Content
 
-- [Contributors](#-contributors)
-- [Project Structure](#-project-structure)
-- [Database schema](#-database-schema)
-- [API](#-api-documentation)
-- [UI Wireframes](#-ui-wireframes)
+- [Contributors](#contributors)
+- [Project Structure](#project-structure)
+- [Database schema](#database-schema)
+- [API](#api-documentation)
+- [UI Wireframes](#ui-wireframes)
 
 ---
 
