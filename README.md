@@ -43,6 +43,10 @@ Every repository is setup with a `README.md` file which explains how to setup an
 - [Deployed frontend application](https://wodss-tippspiel-web.herokuapp.com/)
 - [Deployed backend application](https://wodss-tippspiel-api.herokuapp.com/)
 
+For documentation purposes (API documentation) swagger was used.
+- [Swagger](https://wodss-tippspiel-swagger.herokuapp.com/)
+
+
 The slides of the final presentation can be found here: 
 
 - [Final presentation](https://fhnw-students.github.io/wodss-tippspiel-presentation/)
@@ -72,6 +76,16 @@ If the owner leaves the group, the new owner will be next user. A `team` can not
 The `game` table represents a soccer game like Spain vs Peru. Only an administrator is able to create, update and delete games.
 
 A user can bet a game and this will be stored in the `tip` table. However, he can only alter the score fields and before the game has started. After the admin has enter the score of a game all tips will receive their points.
+
+### Ranking
+
+There are two types of rankings: user ranking and team ranking. The user ranking consists all users of the application. The team ranking filters the users that are member of the corresponding team. They are sorted according to the following criteria:
+
+1. Number of points
+2. Number of bets Submitted (less bets are higher calculated) 
+3. Alphabetical order
+
+As additional feature pagination is implemented with the rankings.  
 
 ### Profile
 
