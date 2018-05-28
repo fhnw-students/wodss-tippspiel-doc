@@ -50,6 +50,9 @@ The slides of the final presentation can be found here:
 - [Final presentation](https://fhnw-students.github.io/wodss-tippspiel-presentation/)
 
 ---
+## Architecture
+
+![Architecture](./architecture.jpg)
 
 ## Database schema
 
