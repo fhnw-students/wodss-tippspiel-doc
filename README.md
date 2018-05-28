@@ -313,8 +313,23 @@ After the states are mutated, the components receive the new data and re-render 
 Entities contain business logic as long as it is not already in the database statements (which are located in the `JpaRepository`'s in the persistence package). `Service`s only contain shared business logic or collective functionality such as gathering and consolidating data into objects. For instance, the management of verification tokens or reset tokens is handled by the `User` but the adding of the ranking information is done in the `RankingService` as this is only data gathering and assembling.
 The following diagram shows the entities and how they are related to each other:
 
-![deployment-process](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/classDiagram.jpg)
+![classDiagram](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/classDiagram.jpg)
 > Source from [github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/classDiagram.jpg)
+
+### Controller layer
+The `Controller` layer simply has the responsibility to receive requests and propagate parameters to the `Service` layer. Data is returned to the `Controller`s. The response is created here and sent to the client. This layer also controls which roles may access the routes.
+
+### Service layer
+The `Service` layer gathers information using business logic on the `Model` layer or using the `Persistence` layer. For instance, the rankings are assembled here while the actual data comes from the `Persistence`. Business logic used for the assembling of requested information is located in the `Model` layer. 
+
+### Service &amp; Controller layer
+The following diagram shows how the `Controller`s interact with the `Service`s:
+![ControllerServicePublicMethods](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/ControllerServicePublicMethods.jpeg)
+> Source from [github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/ControllerServicePublicMethods.jpeg)
+
+
+### Persistence layer
+This layer is used to load data from the database. It mostly consists of `JpaRepository`s which hold generic as well as complex queries in order to load very specific data sets such as rankings. These queries exist because it is by far more performant to filter or aggregate data using sql and because it is by design much better not to load irrelevant data from the database. Pagination is also done in the persistence layer. One can simply pass a `Pageable` object to the repository's method. For instance, such an object can be created using `PageRequest.of(offset, limit)`.
 
 
 ### Mailing
@@ -353,6 +368,7 @@ Whenever something translated has to be used, the `Locale` should be loaded from
 
 #### Design decision
 The design decision was made that any Dto containing translated values, needs this service and the request `Locale` to translate the keys into values. This is a drawback to the convenience of not having to maintain translations in the database which would have lead to a much more complex database design.
+
 
 ### Security
 #### Authentication
