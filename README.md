@@ -204,7 +204,7 @@ The image above shows the flow of the `state management pattern`. As example, th
 
 Firstly, the user fills out correctly the login form and submits the action `signInUser(...)`. The actions are bound with the annotation `@Action(AuthActions.SignInUser)`.
 
-```
+```TypeScript
 @Component({
   components: {
     SpinnerButton,
@@ -247,7 +247,7 @@ export default class Login extends Vue {
 The action `actionTypes.SIGN_IN_USER` firstly mutates the auth state, so that the user sees a spinner. Afterwards, the api call for the login is requested. When the request-promise resolves, the given token will be committed to the `mutationTypes.SIGN_IN_USER_SUCCESS` mutation,
 otherwise the `mutationTypes.SIGN_IN_USER_FAILED` mutation will be called.
 
-```
+```TypeScript
 export const actions: ActionTree<AuthState, AuthState> = {
   [actionTypes.SIGN_IN_USER]({ commit, state }: ActionContext<AuthState, AuthState>, credentials: Credentials): void {
     commit(mutationTypes.SIGN_IN_USER_REQUESTED);
@@ -261,7 +261,7 @@ export const actions: ActionTree<AuthState, AuthState> = {
 Here the mutation of the login process are shown. Like mentioned above, the `SIGN_IN_USER_REQUESTED` mutation only sets the `isFetching` to true,so a spinner is shown to the user.
 The `SIGN_IN_USER_SUCCESS` mutation is called when the login request was successful and a token is sent by the backend. This will set the token as a common authorization header for all further api requests. Moreover, it stores the token in the local-storage and mutates the state.
 
-```
+```TypeScript
 export const mutations: MutationTree<AuthState> = {
   [mutationTypes.SIGN_IN_USER_REQUESTED](state: AuthState): void {
     state.isFetching = true;
