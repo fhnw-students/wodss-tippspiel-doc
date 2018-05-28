@@ -51,6 +51,16 @@ The slides of the final presentation can be found here:
 
 - [Final presentation](https://fhnw-students.github.io/wodss-tippspiel-presentation/)
 
+There are two prepared users to test the application:
+
+- Administrator
+	- username: admin
+	- password: 1234
+- User
+	- username: user
+	- password: 1234
+
+
 ---
 
 ## Database schema
