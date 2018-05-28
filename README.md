@@ -309,7 +309,6 @@ After the states are mutated, the components receive the new data and re-render 
 #### Authentication
 In order to be compliant with state of the art security concepts and not to hold plain text credentials on the client side we decided to use JWT for user authentication. This mechanism enables us to maintain a signed token that expires (in our case) in one hour. This way we do not have to store critical data on the client where it could be accessed by mailcious parties.
 However, there are some exceptions where we grant access with other authentication methods. The following table describes the access level for the specific routes (as one as well can see in the swagger doucmentation):
-
 | Route | Authentication | Reason |
 | ----- | -------------- | ------ |
 | /api  | public        | This is an information that we display on every page in the footer (also on the login or registration pages) |
@@ -320,8 +319,7 @@ However, there are some exceptions where we grant access with other authenticati
 
 ##### Process
 As spring security does not provide JWT support out of the box developers have to implement this by themselves.
-![authentication-process](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
-| Source from [github](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
+![authentication-process](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png) | Source from [github](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
 ###### Login
 1. Among other spring boot spcific filters the request enters the `AuthenticationPathFilter` where it is determined to be a valid request if it uses the Basic Authentication header.
 2. Among other spring boot spcific filters the request enters the `JwtAuthFilter` class where nothing happens because this requests uses Basic Authentication and not the Bearer Token.
@@ -374,13 +372,29 @@ The translations are accessible via the `I18NService` class where a String can b
 * `getParameterizedLocalizedString(String key, Locale locale, String... parameters): String`
 
 #### Locale
-Whenever something translated has to be used, the `Locale` should be loaded from the request headers in the `Controller` (can be passed as argument on a request method (example: `AuthenticationController.register(...)`)).
+Whenever something translated has to be used, the `Locale` should be loaded from the request headers in the `Controller` (can be passed as argument on a request method (example: `AuthenticationController.register(Locale locale)`)).
 
 #### Design decision
 The design decision was made that any Dto containing translated values, needs this service and the request `Locale` to translate the keys into values. This is a drawback to the convenience of not having to maintain translations in the database which would have lead to a much more complex database design.
 
-### Entities & Business Logic
+### Entities &amp; Business Logic
 Entities contain business logic as long as it is not already in the database statements (which are located in the `JpaRepository`'s in the persistence package). `Service`s only contain shared business logic or collective functionality such as gathering and consolidating data into objects. For instance, the management of verification tokens or reset tokens is handled by the `User` but the adding of the ranking information is done in the `RankingService` as this is only data gathering and assembling.
+The following diagram shows the entities and how they are related to each other:
+![deployment-process]https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/classDiagram.jpg) | Source from [github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/classDiagram.jpg)
 
-MySQL, DB Layer
-Deployment
+----
+
+## CI / CD
+Out development process consists of several steps:
+![deployment-process]https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/deployment.png) | Source from [github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/deployment.png)
+
+1. write tests and productive code on a feature branch (feature/xyz)
+2. build locally
+3. push to github when the build is green, otherwise fix everything
+4. Travis CI is triggered by any newly detected commit in Github
+5. peer review with other team members using pull requests in github (maybe some rework has to be done)
+6. merge the feature branch into develop 
+7. Travis runs again
+8. When Travis successfully built the develop branch, heroku gets notified and deploys the new build. This takes a moment or two until the application is available again.
+
+This process applies to frontend and backend.
