@@ -52,7 +52,7 @@ The slides of the final presentation can be found here:
 ---
 ## Architecture
 
-![Architecture](./architecture.jpg)
+![Architecture](./images/architecture.jpg)
 
 ## Database schema
 
