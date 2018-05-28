@@ -343,13 +343,14 @@ Emails are being sent using the `EmailService` class which uses the application 
 The `EmailService` offers a bunch of handy methods to put together an email:
 1. `prepareSession` prepares a javax.mail.Session
 2. `createMessage(String recipient, Locale locale, Session session, String subjectKey, String messageKey, String... contentParameters)` which puts together the message:
- 2.1. fills in the sender
- 2.2. fills in the recipient
- 2.3. fills in the subject with the key from the `MessageBundle` in the respective locale (see I18N for further information)
- 2.4 fills in the content with the key from the `MessageBundle` in the respective locale populated by the contentParameters (these can be used with `{n}` in the `MessageBundle`)
+    - fills in the sender
+    - fills in the recipient
+    - fills in the subject with the key from the `MessageBundle` in the respective locale (see I18N for further information)
+    - fills in the content with the key from the `MessageBundle` in the respective locale populated by the contentParameters (these can be used with `{n}` in the `MessageBundle`)
 3. `sendMessage(Session session, MimeMessage message)` which sends the email.
 
 The service can easily be used to add another method that uses these helper methods to send another email. The logging is very verbose in order to make sure that information is not lost if the email sending fails. This could be very hard to analyze if bugs or incidents occur in production.
+
 
 I18N
 Entitäten
