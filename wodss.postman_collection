@@ -1,0 +1,1084 @@
+{
+	"info": {
+		"_postman_id": "69b940f9-ad7f-46b3-b520-7fc9623949cd",
+		"name": "WM Tippspiel",
+		"description": "WM Tippspiel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api",
+			"description": "Folder for api",
+			"item": [
+				{
+					"name": "Returns information of the api",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/api",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"description": "Folder for auth",
+			"item": [
+				{
+					"name": "Registers a new user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "User object"
+						},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/auth/register",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login a user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "14aa9137-a97c-4522-b9cc-a7f331c883b2",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "20010866-4977-4f64-8485-b12c416139a3",
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"token\", jsonData.token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "hirsch",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/auth/login",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request to reset password of the given user(email)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Reset body"
+						},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/auth/reset",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"auth",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset password of the given user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Password"
+						},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/auth/reset/:resetToken",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"auth",
+								"reset",
+								":resetToken"
+							],
+							"variable": [
+								{
+									"key": "resetToken",
+									"value": "{{resetToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verifies the user using the email address",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/auth/verify/:verifyToken",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"auth",
+								"verify",
+								":verifyToken"
+							],
+							"variable": [
+								{
+									"key": "verifyToken",
+									"value": "{{verifyToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"description": "Folder for users",
+			"item": [
+				{
+					"name": "Returns the currently logged in user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/users/me",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the teams of the current user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/users/me/teams",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"me",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the users team-invitations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/users/me/team-invitation",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"me",
+								"team-invitation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the games with the tips of the user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/users/:username/games",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								":username",
+								"games"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "teams",
+			"description": "Folder for teams",
+			"item": [
+				{
+					"name": "Creates a new team and sets the current user as the owner",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Created team object"
+						},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/teams",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the team with the given id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/teams/:teamId",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"teams",
+								":teamId"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update team",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Updated team object"
+						},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/teams/:teamId",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"teams",
+								":teamId"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						},
+						"description": "Only the owner of the team can change the team"
+					},
+					"response": []
+				},
+				{
+					"name": "Returns the users of the team",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/teams/:teamId/users?email={{email}}",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"teams",
+								":teamId",
+								"users"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "{{email}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invite a user to team",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/teams/:teamId/users?email={{email}}",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"teams",
+								":teamId",
+								"users"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "{{email}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						},
+						"description": "Only the invited user can accept the invitation"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove user from team",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/teams/:teamId/users/:userId",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"teams",
+								":teamId",
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						},
+						"description": "Only the team owner has the permission to do that and the user who wants to remove himself. Moreover if there are not users left in a team then we have to drop it."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "team-invitations",
+			"description": "Folder for team-invitations",
+			"item": [
+				{
+					"name": "Accept the given invitation",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/team-invitations/:invitationId",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"team-invitations",
+								":invitationId"
+							],
+							"variable": [
+								{
+									"key": "invitationId",
+									"value": "{{invitationId}}"
+								}
+							]
+						},
+						"description": "Only the invited user can do that"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove the given invitation",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/team-invitations/:invitationId",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"team-invitations",
+								":invitationId"
+							],
+							"variable": [
+								{
+									"key": "invitationId",
+									"value": "{{invitationId}}"
+								}
+							]
+						},
+						"description": "Only the invited user can do that"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "games",
+			"description": "Folder for games",
+			"item": [
+				{
+					"name": "Get all a games",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/games",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new game",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Create a game object"
+						},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/games",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"games"
+							]
+						},
+						"description": "Only the admins can to that"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a game",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "Updated game object"
+						},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/games/:gameId",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"games",
+								":gameId"
+							],
+							"variable": [
+								{
+									"key": "gameId",
+									"value": "{{gameId}}"
+								}
+							]
+						},
+						"description": "Only the admins can to that"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a game",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/games/:gameId",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"games",
+								":gameId"
+							],
+							"variable": [
+								{
+									"key": "gameId",
+									"value": "{{gameId}}"
+								}
+							]
+						},
+						"description": "Only the admins can to that"
+					},
+					"response": []
+				},
+				{
+					"name": "Enter tip of game",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/games/:gameId/tip?userId={{userId}}",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"games",
+								":gameId",
+								"tip"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "gameId",
+									"value": "{{gameId}}"
+								}
+							]
+						},
+						"description": "Only the current user can alter his bets"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ranking",
+			"description": "Folder for ranking",
+			"item": [
+				{
+					"name": "Returns a list of users with their points",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/ranking/users?page={{page}}&size={{size}}&username={{username}}",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"ranking",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}"
+								},
+								{
+									"key": "size",
+									"value": "{{size}}"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns a list of teams with their points",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/ranking/teams?page={{page}}&size={{size}}&teamname={{teamname}}",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"ranking",
+								"teams"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}"
+								},
+								{
+									"key": "size",
+									"value": "{{size}}"
+								},
+								{
+									"key": "teamname",
+									"value": "{{teamname}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returns a list of users in a team with their points",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/ranking/teams/:teamId?page={{page}}&size={{size}}",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"ranking",
+								"teams",
+								":teamId"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}"
+								},
+								{
+									"key": "size",
+									"value": "{{size}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "teamId",
+									"value": "{{teamId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "game-phases",
+			"description": "Folder for game-phases",
+			"item": [
+				{
+					"name": "Returns a list of phases",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/game-phases",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"game-phases"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "locations",
+			"description": "Folder for locations",
+			"item": [
+				{
+					"name": "Returns a list of locations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/locations",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "nations",
+			"description": "Folder for nations",
+			"item": [
+				{
+					"name": "Returns a list of nations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://wodss-tippspiel-api.herokuapp.com/nations",
+							"protocol": "https",
+							"host": [
+								"wodss-tippspiel-api",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"nations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
