@@ -310,6 +310,7 @@ After the states are mutated, the components receive the new data and re-render 
 #### Authentication
 In order to be compliant with state of the art security concepts and not to hold plain text credentials on the client side we decided to use JWT for user authentication. This mechanism enables us to maintain a signed token that expires (in our case) in one hour. This way we do not have to store critical data on the client where it could be accessed by mailcious parties.
 However, there are some exceptions where we grant access with other authentication methods. The following table describes the access level for the specific routes (as one as well can see in the swagger doucmentation):
+
 | Route | Authentication | Reason |
 | ----- | -------------- | ------ |
 | /api  | public        | This is an information that we display on every page in the footer (also on the login or registration pages) |
@@ -320,7 +321,10 @@ However, there are some exceptions where we grant access with other authenticati
 
 ##### Process
 As spring security does not provide JWT support out of the box developers have to implement this by themselves.
-![authentication-process](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png) | Source from [github](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
+
+![authentication-process](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
+> Source from [github](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
+
 ###### Login
 1. Among other spring boot spcific filters the request enters the `AuthenticationPathFilter` where it is determined to be a valid request if it uses the Basic Authentication header.
 2. Among other spring boot spcific filters the request enters the `JwtAuthFilter` class where nothing happens because this requests uses Basic Authentication and not the Bearer Token.
