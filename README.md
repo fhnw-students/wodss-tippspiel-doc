@@ -59,7 +59,9 @@ The slides of the final presentation can be found here:
 ## Database schema
 
 ![ERM](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/wodss-erm.png)
-> Source from [Github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/wodss-erm.pn)
+> Source from [Github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/wodss-erm.png)
+
+*may be outdated - refer to the entitties. These define the database scheme that can be created using the property spring.jpa.hibernate.ddl-auto*
 
 ### Static data
 
