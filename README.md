@@ -59,15 +59,13 @@ Static data are the `location`, `nation` and the `game_phase` table. These table
 
 ### User
 
-TODO
+When a visitor has registered successfully, he is a `user` of the application. There are two different types of users: administrator and user. A typical user can modify his bets, create teams, leave teams, accept team invitations and deny team invitations. In addition, a user can view the rankings (overall ranking and team rankings) and look for other users and teams. 
+An administrator has the additional page admin where games can be created or deleted. Additionally, the administrator is responsible for the entry of the results when a game is over. 
 
 ### Team
 
-A `user` can create a `team` and invite other users to this `team` by e-mail. Therefore, a `team` consists of several selected users. A `team` has an owner. The creator of the `team` acts as owner. If the owner leaves the group, the new owner will be next user.
-Invitations have to be made by e-mail address. The invited person gets an e-mail, logs in and can accept or deny the invitation. 
-A user can be member of maximum five teams. If he wants to accept the invitation of a new `team`, he has to leave another `team` firstly.
-
-A `team` can not be deleted by an `user` or owner. It will be deleted self-acting when the last user leaves the `team`.
+A `user` can create a `team` and invite other users to this `team` by e-mail. Therefore, a `team` consists of several selected users. A `team` has an owner. The creator of the `team` acts as owner. An owner can modify the team name and invite other users or guests to a group. Invitations have to be made by e-mail address. The invited person gets an e-mail, logs in and can accept or deny the invitation. If he is not yet user he can register by following the link in the e-mail. A user can be member of maximum five teams. If he wants to accept the invitation of a new `team`, he has to leave another `team` firstly.
+If the owner leaves the group, the new owner will be next user. A `team` can not be deleted by an `user` or owner. It will be deleted self-acting when the last user leaves the `team`.
 
 ### Games & Tips
 
@@ -76,8 +74,9 @@ The `game` table represents a soccer game like Spain vs Peru. Only an administra
 A user can bet a game and this will be stored in the `tip` table. However, he can only alter the score fields and before the game has started. After the admin has enter the score of a game all tips will receive their points.
 
 ### Profile
-At the beginning, a profile page was implemented. However, it was only possible to change the own password and the avatar. After we discovered Gravatar as avatar service there was only the possibility to change the password. The avatar can be changed by change it at the Gravatar website.
-Because of the duration of the world cup tournament the probability that a user wants to change his password is quite small. In addition, the password can be reset if a user has forgotten it. Therefore, we decided to delete the profile page.
+
+At the beginning, a profile page was implemented. However, it was only possible to change the own password and the avatar. After we discovered Gravatar as avatar service there was only the possibility to change the password. The avatar can be changed by modify it at the Gravatar website.
+Due to the duration of the world cup tournament the probability that a user wants to change his password is quite small. In addition, the password can be reset if a user has forgotten it. Therefore, we decided to delete the profile page.
 
 ---
 
