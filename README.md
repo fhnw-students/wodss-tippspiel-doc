@@ -195,8 +195,8 @@ Icons are used from the library `font-awesome` and all the nation flags are from
 
 To serve a global store over all the components we used vuex. Vuex is not just a libary it is a `state management pattern` as well. It is heavily inspired by the flux and redux pattern.
 
-![vuex-flow](https://vuex.vuejs.org/en/images/vuex.png)
-| Source from [vuex](https://vuex.vuejs.org/en/intro.html)
+![vuex-flow](https://vuex.vuejs.org/vuex.png)
+> Source from [vuex](https://vuex.vuejs.org/en/intro.html)
 
 [Go to vuex](http://vuex.vuejs.org/en/index.html)
 
