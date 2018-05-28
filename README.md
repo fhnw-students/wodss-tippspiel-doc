@@ -38,7 +38,7 @@ We divided our project into 3 repositories:
 - [Java Spring / REST API](https://github.com/fhnw-students/wodss-tippspiel-api)
 - [Vue.JS Frontend Application](https://github.com/fhnw-students/wodss-tippspiel-web)
 
-Every repository is setup with a `README.md` file, which explains how to setup and run the application. Moreover, we used `Travis` as our CI for our frontend and backend project to build and test it. After `Travis` builded the application successfully `heroku` deploys the application in the cloud. Due to the free solution (if the apps are unused they go in a sleep mode) of `heroku` accessing the application could take a while.
+Every repository is setup with a `README.md` file which explains how to setup and run the application. Moreover, we used `Travis` as CI for our frontend and backend project to build and test it. After `Travis` builded the application successfully `heroku` deploys the application in the cloud. To access the application could take a while, due to the free solution (if the apps are unused they go in sleep mode) of `heroku`.
 
 - [Deployed frontend application](https://wodss-tippspiel-web.herokuapp.com/)
 - [Deployed backend application](https://wodss-tippspiel-api.herokuapp.com/)
@@ -51,7 +51,7 @@ Every repository is setup with a `README.md` file, which explains how to setup a
 
 ### Static data
 
-Static data are the `location`, `nation` and the `game_phase` table. These table will not be changed by the application.
+Static data are the `location`, `nation` and the `game_phase` table. These tables will not be changed by the application.
 
 ### User
 
@@ -184,14 +184,99 @@ Icons are used from the library `font-awesome` and all the nation flags are from
 
 To serve a global store over all the components we used vuex. Vuex is not simply a libary it is a `state management pattern` aswell. It is heavily inspired by the flux and redux pattern.
 
-In the image below shows the flow of the `state management pattern`. To explain this we use the use-case of the login process.
-
-1.
-
 ![vuex-flow](https://vuex.vuejs.org/en/images/vuex.png)
 | Source from [vuex](https://vuex.vuejs.org/en/intro.html)
 
 [Go to vuex](http://vuex.vuejs.org/en/index.html)
+
+The image above shows the flow of the `state management pattern`. To explain this we use the use-case of the login process.
+
+First the user fills out the login form correctly and submits the action `signInUser(...)`. The actions are bound with the annotation `@Action(AuthActions.SignInUser)`.
+
+```
+@Component({
+  components: {
+    SpinnerButton,
+  },
+})
+export default class Login extends Vue {
+  public username = '';
+  public password = '';
+  public isSpinning = true;
+
+  @Getter(AuthGetters.IsAuthenticated)
+  public isAuthenticated: boolean;
+
+  @Getter(AuthGetters.IsFetching)
+  public isFetching: boolean;
+
+  @Getter(AuthGetters.LoginHasFailed)
+  public hasFailed: boolean;
+
+  @Action(AuthActions.SignInUser)
+  public signInUser: (cred: Credentials) => void;
+
+  private log = this.$createLogger('Login');
+
+  public async signIn(): Promise<void> {
+    const isValid = await this.$validator.validateAll();
+    if (isValid) {
+      this.log.info('Try to sign in the user.');
+      this.signInUser({
+        username: this.username,
+        password: this.password,
+      });
+    } else {
+      this.$noty.warning('message.login_incomplete');
+    }
+  }
+	...
+```
+
+The action `actionTypes.SIGN_IN_USER` first mutates the auth state, so that the user sees a spinner. After that
+the api call for the login is requested. When the request-promise resolves the given token will be committed to the `mutationTypes.SIGN_IN_USER_SUCCESS` mutation,
+otherwise the `mutationTypes.SIGN_IN_USER_FAILED` mutation will be called.
+
+```
+export const actions: ActionTree<AuthState, AuthState> = {
+  [actionTypes.SIGN_IN_USER]({ commit, state }: ActionContext<AuthState, AuthState>, credentials: Credentials): void {
+    commit(mutationTypes.SIGN_IN_USER_REQUESTED);
+    authApi.signIn(credentials.username, credentials.password)
+      .then((token: string) => commit(mutationTypes.SIGN_IN_USER_SUCCESS, token))
+      .catch((err: any) => commit(mutationTypes.SIGN_IN_USER_FAILED, err));
+  },
+	...
+```
+
+Here are the mutation of the login process. Like mentioned above the `SIGN_IN_USER_REQUESTED` mutation only sets the `isFetching` to true, so a spinner is shown to the user.
+The `SIGN_IN_USER_SUCCESS` mutation is called when the login request was successful and a token is send by the backend. This will set the token as a common authorization header for all further api requests. Moreover it stores the token in the local-storage and mutates the state.
+
+```
+export const mutations: MutationTree<AuthState> = {
+  [mutationTypes.SIGN_IN_USER_REQUESTED](state: AuthState): void {
+    state.isFetching = true;
+    state.isAuthenticated = false;
+    state.loginHasFailed = false;
+  },
+
+  [mutationTypes.SIGN_IN_USER_SUCCESS](state: AuthState, token: string): void {
+    tokenService.setToken(token);
+    Vue.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+    state.isFetching = false;
+    state.isAuthenticated = true;
+    state.loginHasFailed = false;
+  },
+
+  [mutationTypes.SIGN_IN_USER_FAILED](state: AuthState, error: any): void {
+    state.isFetching = false;
+    state.isAuthenticated = false;
+    state.loginHasFailed = true;
+  },
+	...
+```
+
+After the states are mutated, the components receive the new data and re-render their view.
 
 ## Backend
 
