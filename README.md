@@ -71,7 +71,7 @@ An administrator has the additional page admin where games can be created or del
 A `user` can create a `team` and invite other users to this `team` by e-mail. Therefore, a `team` consists of several selected users. A `team` has an owner. The creator of the `team` acts as owner. An owner can modify the team name and invite other users or guests to a group. Invitations have to be made by e-mail address. The invited person gets an e-mail, logs in and can accept or deny the invitation. If he is not yet user he can register by following the link in the e-mail. A user can be member of maximum five teams. If he wants to accept the invitation of a new `team`, he has to leave another `team` firstly.
 If the owner leaves the group, the new owner will be next user. A `team` can not be deleted by an `user` or owner. It will be deleted self-acting when the last user leaves the `team`.
 
-### Games & Tips
+### Games & Bets
 
 The `game` table represents a soccer game like Spain vs Peru. Only an administrator is able to create, update and delete games.
 
