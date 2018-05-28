@@ -316,6 +316,7 @@ However, there are some exceptions where we grant access with other authenticati
 | /auth/reset and /auth/reset/{resetToken} | public | This route is used to reset a user's forgotten password. | 
 | /auth/verify | public | This route is used in the email verification process during the registration. | 
 | all others | JWT Authentication | All other routes are only accessible for authenticated users. |
+
 ##### Process
 As spring security does not provide JWT support out of the box developers have to implement this by themselves.
 ![authentication-process](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
