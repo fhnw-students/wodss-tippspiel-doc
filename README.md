@@ -303,12 +303,15 @@ export const mutations: MutationTree<AuthState> = {
 
 After the states are mutated, the components receive the new data and re-render their view.
 
-
 ## Backend
+
 ### Security
+
 #### Authentication
+
 In order to be compliant with state of the art security concepts and not to hold plain text credentials on the client side we decided to use JWT for user authentication. This mechanism enables us to maintain a signed token that expires (in our case) in one hour. This way we do not have to store critical data on the client where it could be accessed by mailcious parties.
 However, there are some exceptions where we grant access with other authentication methods. The following table describes the access level for the specific routes (as one as well can see in the swagger doucmentation):
+
 | Route | Authentication | Reason |
 | ----- | -------------- | ------ |
 | /api  | public        | This is an information that we display on every page in the footer (also on the login or registration pages) |
@@ -316,17 +319,23 @@ However, there are some exceptions where we grant access with other authenticati
 | /auth/reset and /auth/reset/{resetToken} | public | This route is used to reset a user's forgotten password. | 
 | /auth/verify | public | This route is used in the email verification process during the registration. | 
 | all others | JWT Authentication | All other routes are only accessible for authenticated users. |
+
 ##### Process
+
 As spring security does not provide JWT support out of the box developers have to implement this by themselves.
 ![authentication-process](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
-| Source from [github](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
+> Source from [github](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
+
 ###### Login
+
 1. Among other spring boot spcific filters the request enters the `AuthenticationPathFilter` where it is determined to be a valid request if it uses the Basic Authentication header.
 2. Among other spring boot spcific filters the request enters the `JwtAuthFilter` class where nothing happens because this requests uses Basic Authentication and not the Bearer Token.
 3. The requests hits the backend resource `AuthenticationController` where it calls the `AuthenticationService` to do the login logic.
 4. The `AuthenticationService` checks whether the user exists or not. If the user does not exist, the request immediately returns. Otherwise a new JWT Token is being generated using the `TokenHelper`. The user object (with the transient populated attribute `#token`) is returned.
 5. The response with the new JWT token is created in the `AuthenticationController` and is sent to the client. The client now has a valid JWT token that can be used to call other services on the API.
+
 ###### Other requests
+
 1. Among other spring boot spcific filters the request enters the `AuthenticationPathFilter` where it is determined to be a valid request if it uses the Bearer Token header.
 2. Among other spring boot spcific filters the request enters the `JwtAuthFilter` class where this `Filter` creates a new `JwtAuthentication` with the given Bearer Token (the JWT token if used correctly). This Authentication is set onto the `SecurityContext`.
 3. The `JwtAuthenticationProvider`'s method `authenticate(Authentication)` will be called (as it was configured as `AuthenticationProvider` supporting the `JwtAuthenticationToken` in the `AuthenticatonConfig`
@@ -334,19 +343,24 @@ As spring security does not provide JWT support out of the box developers have t
 5. Finally the request hits the respective `Controller` where it consumes a service (such as loading games or tips or alike)
 
 #### Passwords
+
 There are many approaches to ensure password strength. We added support in the class `AuthenticationService` where one can simply add more checks in the method `.validatePassword(String)`. At the moment this method only checks that the password is not shorter than 4 characters. For a productive system this is obviously not strong enough. However, we show here that additional checks are easily possible and extendable.
 The passwords themselves are stored in the database as Argon2 hashes. The password hashes are written to the database when a user is being successfully created. The passwords are checked as hashes when a user tries to login with Basic Authentication, of course.
 
 #### SSL
+
 The communication between frontend and backend handled done exclusively via HTTPS. (Valid) certificates are managed by heroku so there is no need for further configuration on any stage. Obviously this has to be adjusted in case on wants to migrate to another service provider than heroku.
 
 ### Mailing
+
 Emails are being sent using the `EmailService` class which uses the application properties to determine the parameterization such as
 * SMTP server hostname
 * SMTP server port
 * Whether to use SMTP authentication
 * The sender's login credentials
+
 The `EmailService` offers a bunch of handy methods to put together an email:
+
 1. `prepareSession` prepares a javax.mail.Session
 2. `createMessage(String recipient, Locale locale, Session session, String subjectKey, String messageKey, String... contentParameters)` which puts together the message:
     - fills in the sender
