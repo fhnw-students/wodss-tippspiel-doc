@@ -13,6 +13,7 @@
 - [UI Wireframes](#ui-wireframes)
 - [Frontend](#frontend)
 - [Backend](#backend)
+- [CI & CD](#ci--cd)
 
 ---
 
@@ -380,13 +381,16 @@ The design decision was made that any Dto containing translated values, needs th
 ### Entities &amp; Business Logic
 Entities contain business logic as long as it is not already in the database statements (which are located in the `JpaRepository`'s in the persistence package). `Service`s only contain shared business logic or collective functionality such as gathering and consolidating data into objects. For instance, the management of verification tokens or reset tokens is handled by the `User` but the adding of the ranking information is done in the `RankingService` as this is only data gathering and assembling.
 The following diagram shows the entities and how they are related to each other:
-![deployment-process]https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/classDiagram.jpg) | Source from [github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/classDiagram.jpg)
+![deployment-process]https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/classDiagram.jpg)
+> Source from [github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/classDiagram.jpg)
 
 ----
 
 ## CI / CD
 Out development process consists of several steps:
-![deployment-process]https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/deployment.png) | Source from [github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/deployment.png)
+
+![deployment-process]https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/deployment.png)
+> Source from [github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/deployment.png)
 
 1. write tests and productive code on a feature branch (feature/xyz)
 2. build locally
