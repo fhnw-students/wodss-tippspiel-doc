@@ -98,56 +98,100 @@ We put the wireframes into a separate document.
 The chosen JS-framework Vue.js does not force a specific structure. However, the ecosystem provides some useful tools and libraries to build large scale application.
 
 ```
-├── public									# static files like index.html & favicon
+├── public  # static files like index.html & favicon
 ├── src
-│   ├── assets							# Fonts and images
+│   ├── assets               # Fonts and images
 │   ├── components
-│		│   ├── Hello.vue				# Vue.JS components
-│		│   └── ...
+│   │   ├── Hello.vue        # Vue.JS components
+│   │   └── ...
 │   ├── config
-│		│   └── app.config.ts		# configuration from the .env* files
+│   │   └── app.config.ts    # configuration from the .env* files
 │   ├── locals
-│		│   ├── de.ts						# Translation files
-│		│   └── ...
+│   │   ├── de.ts            # Translation files
+│   │   └── ...
 │   ├── models
-│   ├── pages								# Page components
+│   ├── pages                # Page components
 │   ├── plugins
-│		│   └── **/*.plugin.ts	# Vue.JS plugins
-│   ├── routes							# All defined application routes are here
+│   │   └── **/*.plugin.ts   # Vue.JS plugins
+│   ├── routes               # All defined application routes are here
 │   ├── services
-│		│   ├── api							# All service for making api requests
-│		│   └── **/*.service.ts
-│   ├── store								# Vuex store
-│		│   ├── modules
-│		│   └── index.ts
-│   ├── styles							# Global styles written in SASS
-│   ├── types								# Custom type definitions
-│   ├── App.vue							# Main component
-│   └── main.ts							# Bootstraps the app
-├── .env.development				# App configuration for the development environment
+│   │   ├── api              # All service for making api requests
+│   │   └── **/*.service.ts
+│   ├── store                # Vuex store
+│   │   ├── modules
+│   │   └── index.ts
+│   ├── styles               # Global styles written in SASS
+│   ├── types                # Custom type definitions
+│   ├── App.vue              # Main component
+│   └── main.ts              # Bootstraps the app
+├── .env.development         # App configuration for the development environment
 ├── .env.production
-├── .travis.yml							# CI configuration
+├── .travis.yml              # CI configuration
 ├── package.json
-├── Procfile								# Defines the run command for heroku
-├── README.md								# Documentation
-├── server.js								# Small web-server for deploying on heroku
-├── static.json							# Defines the root path for heroku
-├── tsconfig.json						# TypeScript configuration
-├── tslint.json							# TypeScript lint configuration
-└── vue.config.js						# Extends the webpack config
+├── Procfile                 # Defines the run command for heroku
+├── README.md                # Documentation
+├── server.js                # Small web-server for deploying on heroku
+├── static.json              # Defines the root path for heroku
+├── tsconfig.json            # TypeScript configuration
+├── tslint.json              # TypeScript lint configuration
+└── vue.config.js            # Extends the webpack config
 ```
 
 ### Libraries
 
-TODO
+For the most libraries plugins are defined to serve the library though the Vue instance.
+
+#### Axios
+
+`Axios` is a promised based HTTP client for the browser. In this project it used for all the AJAX-request.
+
+[Go to axios](https://github.com/mzabriskie/axios)
+
+We used a response interceptor to catch the 401 responses to redirect to user to the login page. Moreover, their is a request interceptor to set the used language.
+
+All the `./src/services/api/*.api.ts` uses this library.
+
+### Internationalization
+
+To serve various languages we used the `vue-i18n` plugin. In the `./src/locals/<lang_key>.ts` files are the translations.
+
+[Go to the vue-i18n](https://kazupon.github.io/vue-i18n/)
 
 ### Routing
 
-TODO
+Routing is done by the plugin `vue-router`. All the routes are configured int he `./src/routes/index.ts`. We defined to route properties:
+
+- **auth** These routes must have a valid authentication.
+- **guest** These routes are only accessible when nobody is authenticated.
+
+In the router plugin file `./src/plugins/vue-router.plugin.ts` we defined a middleware which listens to those properties and redirects if necessary.
+
+[Go to the vue-router](http://router.vuejs.org/en/index.html)
+
+### Styling
+
+For the main styles we used `bootstrap version 4`. This is written in Sass and makes in easy to customize thanks to all the defined variables. Moreover, it has a flexible grid solution to handle responsive issues.
+
+Icons are used from the library `font-awesome` and all the nation flags are from the `flag-icon-css` library.
+
+[Go to bootstrap](https://getbootstrap.com/)
+
+[Go to font-awesome](https://fontawesome.com/)
+
+[Go to flag-icon-css](http://flag-icon-css.lip.is)
 
 ### Store Management
 
-TODO
+To serve a global store over all the components we used vuex. Vuex is not simply a libary it is a `state management pattern` aswell. It is heavily inspired by the flux and redux pattern.
+
+In the image below shows the flow of the `state management pattern`. To explain this we use the use-case of the login process.
+
+1.
+
+![vuex-flow](https://vuex.vuejs.org/en/images/vuex.png)
+| Source from [vuex](https://vuex.vuejs.org/en/intro.html)
+
+[Go to vuex](http://vuex.vuejs.org/en/index.html)
 
 ## Backend
 
