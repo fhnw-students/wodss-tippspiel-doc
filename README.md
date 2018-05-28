@@ -334,7 +334,10 @@ As spring security does not provide JWT support out of the box developers have t
 There are many approaches to ensure password strength. We added support in the class `AuthenticationService` where one can simply add more checks in the method `.validatePassword(String)`. At the moment this method only checks that the password is not shorter than 4 characters. For a productive system this is obviously not strong enough. However, we show here that additional checks are easily possible and extendable.
 The passwords themselves are stored in the database as Argon2 hashes. The password hashes are written to the database when a user is being successfully created. The passwords are checked as hashes when a user tries to login with Basic Authentication, of course.
 
-#### Mailing
+#### SSL
+The communication between frontend and backend handled done exclusively via HTTPS. (Valid) certificates are managed by heroku so there is no need for further configuration on any stage. Obviously this has to be adjusted in case on wants to migrate to another service provider than heroku.
+
+### Mailing
 Emails are being sent using the `EmailService` class which uses the application properties to determine the parameterization such as
 * SMTP server hostname
 * SMTP server port
@@ -351,6 +354,8 @@ The `EmailService` offers a bunch of handy methods to put together an email:
 
 The service can easily be used to add another method that uses these helper methods to send another email. The logging is very verbose in order to make sure that information is not lost if the email sending fails. This could be very hard to analyze if bugs or incidents occur in production.
 
+
+### Internationalization
 
 I18N
 Entitäten
