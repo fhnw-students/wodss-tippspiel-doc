@@ -53,11 +53,13 @@ The slides of the final presentation can be found here:
 ---
 ## Architecture
 
-![Architecture](./images/architecture.jpg)
+![Architecture](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/architecture.jpg)
+> Source from [Github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/architecture.jpg)
 
 ## Database schema
 
-![ERM](./wodss-erm.png)
+![ERM](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/wodss-erm.png)
+> Source from [Github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/wodss-erm.pn)
 
 ### Static data
 
