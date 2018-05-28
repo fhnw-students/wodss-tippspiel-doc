@@ -43,10 +43,6 @@ Every repository is setup with a `README.md` file which explains how to setup an
 - [Deployed frontend application](https://wodss-tippspiel-web.herokuapp.com/)
 - [Deployed backend application](https://wodss-tippspiel-api.herokuapp.com/)
 
-For documentation purposes (API documentation) swagger was used.
-- [Swagger](https://wodss-tippspiel-swagger.herokuapp.com/)
-
-
 The slides of the final presentation can be found here: 
 
 - [Final presentation](https://fhnw-students.github.io/wodss-tippspiel-presentation/)
