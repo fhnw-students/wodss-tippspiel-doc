@@ -303,15 +303,12 @@ export const mutations: MutationTree<AuthState> = {
 
 After the states are mutated, the components receive the new data and re-render their view.
 
+
 ## Backend
-
 ### Security
-
 #### Authentication
-
 In order to be compliant with state of the art security concepts and not to hold plain text credentials on the client side we decided to use JWT for user authentication. This mechanism enables us to maintain a signed token that expires (in our case) in one hour. This way we do not have to store critical data on the client where it could be accessed by mailcious parties.
 However, there are some exceptions where we grant access with other authentication methods. The following table describes the access level for the specific routes (as one as well can see in the swagger doucmentation):
-
 | Route | Authentication | Reason |
 | ----- | -------------- | ------ |
 | /api  | public        | This is an information that we display on every page in the footer (also on the login or registration pages) |
@@ -319,23 +316,17 @@ However, there are some exceptions where we grant access with other authenticati
 | /auth/reset and /auth/reset/{resetToken} | public | This route is used to reset a user's forgotten password. | 
 | /auth/verify | public | This route is used in the email verification process during the registration. | 
 | all others | JWT Authentication | All other routes are only accessible for authenticated users. |
-
 ##### Process
-
 As spring security does not provide JWT support out of the box developers have to implement this by themselves.
 ![authentication-process](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
-> Source from [github](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
-
+| Source from [github](https://github.com/fhnw-students/wodss-tippspiel-doc/blob/master/AuthenticationProcess.png)
 ###### Login
-
 1. Among other spring boot spcific filters the request enters the `AuthenticationPathFilter` where it is determined to be a valid request if it uses the Basic Authentication header.
 2. Among other spring boot spcific filters the request enters the `JwtAuthFilter` class where nothing happens because this requests uses Basic Authentication and not the Bearer Token.
 3. The requests hits the backend resource `AuthenticationController` where it calls the `AuthenticationService` to do the login logic.
 4. The `AuthenticationService` checks whether the user exists or not. If the user does not exist, the request immediately returns. Otherwise a new JWT Token is being generated using the `TokenHelper`. The user object (with the transient populated attribute `#token`) is returned.
 5. The response with the new JWT token is created in the `AuthenticationController` and is sent to the client. The client now has a valid JWT token that can be used to call other services on the API.
-
 ###### Other requests
-
 1. Among other spring boot spcific filters the request enters the `AuthenticationPathFilter` where it is determined to be a valid request if it uses the Bearer Token header.
 2. Among other spring boot spcific filters the request enters the `JwtAuthFilter` class where this `Filter` creates a new `JwtAuthentication` with the given Bearer Token (the JWT token if used correctly). This Authentication is set onto the `SecurityContext`.
 3. The `JwtAuthenticationProvider`'s method `authenticate(Authentication)` will be called (as it was configured as `AuthenticationProvider` supporting the `JwtAuthenticationToken` in the `AuthenticatonConfig`
@@ -343,16 +334,13 @@ As spring security does not provide JWT support out of the box developers have t
 5. Finally the request hits the respective `Controller` where it consumes a service (such as loading games or tips or alike)
 
 #### Passwords
-
 There are many approaches to ensure password strength. We added support in the class `AuthenticationService` where one can simply add more checks in the method `.validatePassword(String)`. At the moment this method only checks that the password is not shorter than 4 characters. For a productive system this is obviously not strong enough. However, we show here that additional checks are easily possible and extendable.
 The passwords themselves are stored in the database as Argon2 hashes. The password hashes are written to the database when a user is being successfully created. The passwords are checked as hashes when a user tries to login with Basic Authentication, of course.
 
 #### SSL
-
 The communication between frontend and backend handled done exclusively via HTTPS. (Valid) certificates are managed by heroku so there is no need for further configuration on any stage. Obviously this has to be adjusted in case on wants to migrate to another service provider than heroku.
 
 ### Mailing
-
 Emails are being sent using the `EmailService` class which uses the application properties to determine the parameterization such as
 * SMTP server hostname
 * SMTP server port
@@ -360,21 +348,37 @@ Emails are being sent using the `EmailService` class which uses the application 
 * The sender's login credentials
 
 The `EmailService` offers a bunch of handy methods to put together an email:
-
 1. `prepareSession` prepares a javax.mail.Session
 2. `createMessage(String recipient, Locale locale, Session session, String subjectKey, String messageKey, String... contentParameters)` which puts together the message:
-    - fills in the sender
-    - fills in the recipient
-    - fills in the subject with the key from the `MessageBundle` in the respective locale (see I18N for further information)
-    - fills in the content with the key from the `MessageBundle` in the respective locale populated by the contentParameters (these can be used with `{n}` in the `MessageBundle`)
+    2.1. fills in the sender
+    2.2. fills in the recipient
+    2.3. fills in the subject with the key from the `MessageBundle` in the respective locale (see I18N for further information)
+    2.4 fills in the content with the key from the `MessageBundle` in the respective locale populated by the contentParameters (these can be used with `{n}` in the `MessageBundle`)
 3. `sendMessage(Session session, MimeMessage message)` which sends the email.
 
 The service can easily be used to add another method that uses these helper methods to send another email. The logging is very verbose in order to make sure that information is not lost if the email sending fails. This could be very hard to analyze if bugs or incidents occur in production.
 
-
 ### Internationalization
+The internationalization is necessary in the backend as well because certain entities can be translated. As of now these are the following:
+1. Emails, obviously as they are sent from the backend to the receiver.
+2. Country names as we only maintain the key (jp for Japan, tn for Tunesien, ...) in the database and then access the correct translation in the respective `MessageBundle`
+3. Stadium names as we only maintain the key (Moscow.Luzhniki for Olympiastadion Luschniki, Moskau, ...) in the database and then access the correct translation in the respective `MessageBundle`
+4. Game phase names as we only maintain the key (phase.name.group1 for Gruppenphase 1, ...) in the database and then access the correct translation in the respective `MessageBundle`
+5. Tip rules such as correct winner, correct amount of guest score, ...
 
-I18N
-Entitäten
+#### I18NService
+The translations are accessible via the `I18NService` class where a String can be loaded either parameterized or simple (that means it does not contain placeholders  `{n}`):
+* `getLocalizedString(String key, Locale locale): String`
+* `getParameterizedLocalizedString(String key, Locale locale, String... parameters): String`
+
+#### Locale
+Whenever something translated has to be used, the `Locale` should be loaded from the request headers in the `Controller` (can be passed as argument on a request method (example: `AuthenticationController.register(...)`)).
+
+#### Design decision
+The design decision was made that any Dto containing translated values, needs this service and the request `Locale` to translate the keys into values. This is a drawback to the convenience of not having to maintain translations in the database which would have lead to a much more complex database design.
+
+### Entities & Business Logic
+Entities contain business logic as long as it is not already in the database statements (which are located in the `JpaRepository`'s in the persistence package). `Service`s only contain shared business logic or collective functionality such as gathering and consolidating data into objects. For instance, the management of verification tokens or reset tokens is handled by the `User` but the adding of the ranking information is done in the `RankingService` as this is only data gathering and assembling.
+
 MySQL, DB Layer
 Deployment
