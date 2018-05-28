@@ -91,20 +91,6 @@ paths:
             $ref: "#/definitions/LoginResponse"
         401:
           description: "Invalid credentials"
-  /auth/logout:
-    post:
-      security:
-        - bearerAuth: []
-      tags:
-      - "auth"
-      summary: "Logout a user"
-      description: ""
-      operationId: "logoutUser"
-      responses:
-        200:
-          description: "Successful operation"
-        401:
-          description: "Invalid credentials"
   /auth/reset:
     put:
       tags:
@@ -202,36 +188,6 @@ paths:
             $ref: "#/definitions/User"
         401:
           description: "Invalid credentials"
-    put:
-      security:
-        - bearerAuth: []
-      tags:
-      - "users"
-      summary: "Update user"
-      description: ""
-      operationId: "updateUser"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Updated user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/User"
-        400:
-          description: "Invalid user supplied"
-        404:
-          description: "User not found"
-        401:
-          description: "Invalid credentials"
-        403:
-          description: "Only the logged in user can modify himself"
   /users/me/teams:
     get:
       security:
@@ -250,6 +206,26 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Team"
+        401:
+          description: "Invalid credentials"
+  /users/me/team-invitation:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "users"
+      summary: "Returns the users team-invitations"
+      description: ""
+      operationId: "getMyTeamInvitation"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/TeamInvitation"
         401:
           description: "Invalid credentials"
   /users/{username}/games:
@@ -364,34 +340,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/ranking:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-      - "teams"
-      summary: "Returns a list of users with their rank and points"
-      description: ""
-      operationId: "getTeamRanking"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "teamId"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/UserRanking"
-        401:
-          description: "Invalid credentials"
-        404:
-          description: "Not found"
-  /teams/{teamId}/user:
+  /teams/{teamId}/users:
     get:
       security:
         - bearerAuth: []
@@ -418,14 +367,14 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/TeamUser"
-    post:
+    put:
       security:
         - bearerAuth: []
       tags:
       - "teams"
-      summary: "Creates a team invitation"
-      description: "Only the owner of the team can invited other users by email"
-      operationId: "inviteUserToTeam"
+      summary: "Invite a user to team"
+      description: "Only the invited user can accept the invitation"
+      operationId: "addUserToTeam"
       produces:
       - "application/json"
       parameters:
@@ -440,30 +389,6 @@ paths:
       responses:
         200:
           description: "Successful operation"
-        400:
-          description: "Invalid parameter supplied"
-        404:
-          description: "Not found"
-        401:
-          description: "Invalid credentials"
-    put:
-      security:
-        - bearerAuth: []
-      tags:
-      - "teams"
-      summary: "Adds a user to team"
-      description: "Only the invited user can accept the invitation"
-      operationId: "addUserToTeam"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "teamId"
-        in: "path"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
           schema:
             $ref: "#/definitions/Team"
         400:
@@ -472,7 +397,7 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
-  /teams/{teamId}/user/{userId}:
+  /teams/{teamId}/users/{userId}:
     delete:
       security:
         - bearerAuth: []
@@ -501,7 +426,77 @@ paths:
           description: "Not found"
         401:
           description: "Invalid credentials"
+  /team-invitations/{invitationId}:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+      - "teams"
+      summary: "Accept the given invitation"
+      description: "Only the invited user can do that"
+      operationId: "acceptTeamInvitation"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invitationId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: "Successfully removed user from the team"
+        400:
+          description: "Invalid parameter supplied"
+        404:
+          description: "Not found"
+        401:
+          description: "Invalid credentials"
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+      - "teams"
+      summary: "Remove the given invitation"
+      description: "Only the invited user can do that"
+      operationId: "removeTeamInvitation"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "invitationId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: "Successfully removed user from the team"
+        400:
+          description: "Invalid parameter supplied"
+        404:
+          description: "Not found"
+        401:
+          description: "Invalid credentials"
   /games:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "games"
+      summary: "Get all a games"
+      description: ""
+      operationId: "getAllGames"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Game"
+        401:
+          description: "Invalid credentials"
+        403:
+          description: "Not allowed"
     post:
       security:
         - bearerAuth: []
@@ -628,6 +623,19 @@ paths:
       operationId: "getUsersRanking"
       produces:
       - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "size"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "username"
+        in: "query"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Successful operation"
@@ -648,6 +656,19 @@ paths:
       operationId: "getTeamsRanking"
       produces:
       - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "size"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "teamname"
+        in: "query"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Successful operation"
@@ -655,6 +676,39 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/TeamRanking"
+        401:
+          description: "Invalid credentials"
+  /ranking/teams/{teamId}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+      - "ranking"
+      summary: "Returns a list of users in a team with their points"
+      description: ""
+      operationId: "getUserTeamsRanking"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "page"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "size"
+        in: "query"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UserRanking"
         401:
           description: "Invalid credentials"
   /game-phases:
@@ -881,6 +935,16 @@ definitions:
       guestScore:
         type: "integer"
         format: "int64"
+  TeamInvitation:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      email:
+        type: "string"
+      team:
+        $ref: "#/definitions/Team"
   Tip:
     type: "object"
     properties:
