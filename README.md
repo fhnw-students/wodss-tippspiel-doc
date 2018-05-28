@@ -389,7 +389,7 @@ The following diagram shows the entities and how they are related to each other:
 ## CI / CD
 Out development process consists of several steps:
 
-![deployment-process]https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/deployment.png)
+![deployment-process](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/deployment.png)
 > Source from [github](https://raw.githubusercontent.com/fhnw-students/wodss-tippspiel-doc/master/images/deployment.png)
 
 1. write tests and productive code on a feature branch (feature/xyz)
