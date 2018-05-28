@@ -11,6 +11,8 @@
 - [Database schema](#database-schema)
 - [API](#api-documentation)
 - [UI Wireframes](#ui-wireframes)
+- [Frontend](#frontend)
+- [Backend](#backend)
 
 ---
 
